@@ -4,14 +4,17 @@ import pandas as pd
 import requests 
 
 # Formato da data: AAAA-MM-DD
-datai = '2020-07-26'
-dataf = '2020-07-27'
-est_cod = 'A621'
+datai = '2020-10-01'
+dataf = '2020-10-02'
+est_cod = ['A621', 'A618', 'A606', 'A609', 'A607']
+nomes = ['Vila Militar', 'Teresópolis', 'Cabo Frio', 'Resende', 'Campos dos Goytacazes']
 
-url = 'https://apitempo.inmet.gov.br/estacao/' + datai + '/' + dataf + '/' + est_cod
-r = requests.get(url)
-info = r.json()
-# print(info[0])
+for est in est_cod:
+    url = 'https://apitempo.inmet.gov.br/estacao/' + datai + '/' + dataf + '/' + est
+    print(url)
+    r = requests.get(url)
+    info = r.json()
+    # print(info[0])
 
-df = pd.DataFrame(info)
-df.to_csv('inmet_teste.csv')
+    df = pd.DataFrame(info)
+    df.to_csv(est+'_'+datai[:-2]+'.csv')
