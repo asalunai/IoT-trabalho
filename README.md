@@ -17,3 +17,7 @@ Administrativo:
 1. validar a ideia.
 2. chegar com algum tipo de resultado preliminar.
 3. Tentar ler algumas referências do artigo dela.
+
+Questões extras: (a serem discutidas)
+4. A implementação de opinião apresentada no artigo não usa o "base rate" (`a`).   
+   Porque não? E como esse parâmetro poderia ser usado?
