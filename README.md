@@ -21,3 +21,22 @@ Administrativo:
 Questões extras: (a serem discutidas)
 4. A implementação de opinião apresentada no artigo não usa o "base rate" (`a`).   
    Porque não? E como esse parâmetro poderia ser usado?
+
+
+### Instruções
+
+Para instalar as dependências do projeto:
+
+```poetry install```
+
+Para executar o trabalho:
+
+```poetry run iot_trabalho```
+
+Para executar scripts extras:
+
+```poetry run python ./<nome_script>.py```
+
+Para validar tipagem:
+
+```poetry run mypy --strict iot_trabalho```
