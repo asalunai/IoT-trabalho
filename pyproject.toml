@@ -5,7 +5,7 @@ description = "Trabalho da matéria de Internet das Coisas do PESC-UFRJ no perí
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 simpy = "^4.0.1"
 termcolor = "^1.1.0"
 pandas = "^1.1.3"
