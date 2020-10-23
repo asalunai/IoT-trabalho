@@ -63,18 +63,24 @@ def consenso(w_a: Opiniao, w_b: Opiniao, lim: float = imprecisao) -> Opiniao:
     """Computa o consenso entre duas opiniões de diferentes fontes
     acerca de um mesmo evento"""
 
-    if w_a.get_evento() != w_b.get_evento():
-        cprint(
-            "WARNING:\t Opiniões dizem respeito a eventos diferentes. Resultado "
-            "pode não ter sentido prático",
-            "yellow",
-        )
-
-    if w_a.get_fonte() == w_b.get_fonte():
-        cprint("WARNING:\t Ambas as opinões são oriundas da mesma fonte", "yellow")
+    # TODO: Verificar se vou deixar isso aqui
+    #if w_a.get_evento() != w_b.get_evento():
+    #    cprint(
+    #        "WARNING:\t Opiniões dizem respeito a eventos diferentes. Resultado "
+    #        "pode não ter sentido prático",
+    #        "yellow",
+    #    )
+    #
+    #if w_a.get_fonte() == w_b.get_fonte():
+    #    cprint("WARNING:\t Ambas as opinões são oriundas da mesma fonte", "yellow")
 
     # Combinação das opiniões
-    w_ab = Opiniao(f"{w_a.get_fonte()}+{w_b.get_fonte()}", w_a.get_evento())
+    fonte = f"{w_a.get_fonte()}+{w_b.get_fonte()}"
+
+    if w_a.get_fonte() == w_b.get_fonte():
+        fonte = w_a.get_fonte()
+
+    w_ab = Opiniao(fonte, w_a.get_evento())
 
     b_a, d_a, u_a = w_a.get_opiniao()
     b_b, d_b, u_b = w_b.get_opiniao()
