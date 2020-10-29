@@ -5,10 +5,9 @@
 
 __all__ = ["Receptor"]
 
-import typing as T
+
 from dataclasses import dataclass
 import numpy as np
-from time import sleep
 from simpy import Environment
 
 from iot_trabalho.opiniao import * # Opiniao, consenso
