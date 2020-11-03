@@ -14,6 +14,7 @@ from termcolor import colored, cprint
 DIV = 1
 imprecisao = 0.000001
 
+
 @dataclass
 class Opiniao:
     """
@@ -28,14 +29,17 @@ class Opiniao:
     __descrenca: float = 0.0
     __incerteza: float = 1.0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not self.consistente(self.__crenca, self.__descrenca, self.__incerteza):
-            cprint("WARNING:\t Valores de opinião inválidos. Revertido para default.", "yellow")
+            cprint(
+                "WARNING:\t Valores de opinião inválidos. Revertido para default.",
+                "yellow",
+            )
             self.__crenca = 0.0
             self.__descrenca = 0.0
             self.__incerteza = 1.0
 
-    def consistente(self, b, d, u):
+    def consistente(self, b: float, d: float, u: float) -> bool:
         if abs(b + d + u - 1) <= imprecisao:
             return True
         return False
@@ -44,12 +48,15 @@ class Opiniao:
         return self.__crenca, self.__descrenca, self.__incerteza
 
     def set_opiniao(self, b, d, u):
-        if self.consistente(b,d,u):
+        if self.consistente(b, d, u):
             self.__crenca = b
             self.__descrenca = d
             self.__incerteza = u
         else:
-            cprint("WARNING:\t Valores de opinião inválidos. Opinião não foi alterada.", "yellow")
+            cprint(
+                "WARNING:\t Valores de opinião inválidos. Opinião não foi alterada.",
+                "yellow",
+            )
 
     def get_evento(self):
         return self.__evento
@@ -58,20 +65,19 @@ class Opiniao:
         return self.__fonte
 
 
-
 def consenso(w_a: Opiniao, w_b: Opiniao, lim: float = imprecisao) -> Opiniao:
     """Computa o consenso entre duas opiniões de diferentes fontes
     acerca de um mesmo evento"""
 
     # TODO: Verificar se vou deixar isso aqui
-    #if w_a.get_evento() != w_b.get_evento():
+    # if w_a.get_evento() != w_b.get_evento():
     #    cprint(
     #        "WARNING:\t Opiniões dizem respeito a eventos diferentes. Resultado "
     #        "pode não ter sentido prático",
     #        "yellow",
     #    )
     #
-    #if w_a.get_fonte() == w_b.get_fonte():
+    # if w_a.get_fonte() == w_b.get_fonte():
     #    cprint("WARNING:\t Ambas as opinões são oriundas da mesma fonte", "yellow")
 
     # Combinação das opiniões
@@ -106,15 +112,15 @@ def consenso(w_a: Opiniao, w_b: Opiniao, lim: float = imprecisao) -> Opiniao:
 
 
 def teste() -> None:
-    wA = Opiniao('A', 1, 0.8, 0.1, 0.1)
-    wB = Opiniao('B', 1, 0.7, 0.15, 0.15)
+    wA = Opiniao("A", 1, 0.8, 0.1, 0.1)
+    wB = Opiniao("B", 1, 0.7, 0.15, 0.15)
 
     print("wA: ", wA.get_opiniao())
     print("wB: ", wB.get_opiniao())
     print("wA + wB: ", consenso(wA, wB))
 
-    wC = Opiniao('C', 2, 0.7, 0.1, 0.5)
+    wC = Opiniao("C", 2, 0.7, 0.1, 0.5)
     print(wC)
 
     print("wA + wC: ", consenso(wA, wC))
-    print("wA + wA: ", consenso(wA,wA))
+    print("wA + wA: ", consenso(wA, wA))
