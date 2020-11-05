@@ -9,31 +9,31 @@ from .leitura import DataReader
 
 
 def main() -> None:
-    print("Hello World")
+    sensores = [
+        "A606",
+        "A607",
+        "A609",
+        "A618",
+        "A621",
+    ]
 
-    # env = simpy.Environment()
-    # N = 5
-    # waitTime = 5
-    #
-    # r1 = Receptor('r1', env, N, waitTime)
-    #
-    #
-    #
-    # env.run(until=10)
+    env = simpy.Environment()
 
     reader = DataReader(
         Path("./dados_diarios"),
-        [
-            "A606",
-            "A607",
-            "A609",
-            "A618",
-            "A621",
-        ],
+        sensores,
     )
 
-    for entry in reader.read_day_by_day():
-        print(entry)
+    N = len(sensores)
+
+    r1 = Receptor('r1', env, N, reader)
+
+
+
+    env.run(until=10)
+
+    #for entry in reader.read_day_by_day():
+    #    print(entry)
 
 
 if __name__ == "__main__":

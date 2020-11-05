@@ -11,6 +11,7 @@ import numpy as np
 from simpy import Environment
 
 from iot_trabalho.opiniao import *  # Opiniao, consenso
+from iot_trabalho.leitura import *  # DataReader, DailyData
 
 # from dados import get_dados
 
@@ -18,14 +19,6 @@ from iot_trabalho.opiniao import *  # Opiniao, consenso
 # TODO:
 #   - Testar
 #   - Mesclar com a implementação
-
-
-# TODO: Apagar! Vamos fazer essa funcao em outro lugar
-N_SENSORES = 5
-
-
-def get_dados():
-    return np.zeros(N_SENSORES)
 
 
 # ------------
@@ -54,7 +47,11 @@ class Receptor:
     nome: str
     env: Environment
     N: int  # Número de sensores conectados ao nó
-    wait: float  # FIXME: Em segundos? Verificar essa variavel!
+    reader: DataReader
+
+    wait: float = 1  # Número de iterações a se esperar
+    # TODO: Mudar essa variavel. Por enquanto estou considerando unidade 'dias' (espera 1 dia para analisar de novo.
+
     p: float = 1  # Peso dos eventos positivos
     n: float = 10  # Peso dos eventos negativos
     MIN: float = (
@@ -80,11 +77,18 @@ class Receptor:
 
     def run(self):
         while True:
-            dados = (
-                get_dados()
-            )  # TODO: Funcao precisa ser definida... (extraida da biblioteca de baixar dados)
+            dictDados = next(self.reader.read_day_by_day())
+            # TODO: Discutir os dados que vamos usar, e COMO vamos usar aqui dentro
 
-            media = dados.mean()
+            dados = np.zeros(self.N)
+            i = 0
+            soma = 0
+            for totalInfo in dictDados.values():
+                dados[i] = totalInfo.max_temp
+                soma += totalInfo.max_temp
+                i += 1
+
+            media = soma/i
             dp = dados.std()
 
             anomaliasAtuais = {}
@@ -122,6 +126,6 @@ class Receptor:
 
         # Temporariamente, para teste, está sendo apenas impressa
         if currAnom:
-            print(mean, self.opTot, currAnom)
+            print(f"Iteração {self.env.now}: \n", mean, self.opTot, currAnom, "\n")
         else:
-            print(mean, self.opTot)
+            print(f"Iteração {self.env.now}: \n", mean, self.opTot, "\n")

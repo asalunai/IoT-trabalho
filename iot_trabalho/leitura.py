@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import date
 from csv import DictReader
 
-__all__ = ["load_dados", "DataReader", "DailyData"]
+__all__ = ["DataReader", "DailyData"]
 
 from pathlib import Path
 
