@@ -27,6 +27,7 @@ class DataReader:
     def __init__(self, directory_path: Path, station_names: T.List[str]) -> None:
         self._directory_path = directory_path
         self._station_names = station_names
+        # NOTE: Não estamos usando os nomes, só os códigos!
 
     def read_day_by_day(self) -> T.Generator[T.Dict[str, DailyData], None, None]:
         station_files: T.Tuple[T.Tuple[str, T.TextIO], ...] = tuple(

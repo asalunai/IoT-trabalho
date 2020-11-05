@@ -30,7 +30,7 @@ def main() -> None:
 
 
 
-    env.run(until=10)
+    env.run(until=10) # Temos 397 dias
 
     #for entry in reader.read_day_by_day():
     #    print(entry)

@@ -26,7 +26,7 @@ from iot_trabalho.leitura import *  # DataReader, DailyData
 
 def anomalia(dado: float, media: float, desvio: float) -> bool:
     # TODO: Rever essa definicao de anomalia
-    return abs(dado - media) > desvio
+    return abs(dado - media) > 1.5*desvio
 
 
 def media_seletiva(arr: np.ndarray, indices) -> float:
@@ -73,11 +73,13 @@ class Receptor:
 
         self.k = 1
 
+        self.reader = self.reader.read_day_by_day()
+
         self.action = self.env.process(self.run())
 
     def run(self):
         while True:
-            dictDados = next(self.reader.read_day_by_day())
+            dictDados = next(self.reader)
             # TODO: Discutir os dados que vamos usar, e COMO vamos usar aqui dentro
 
             dados = np.zeros(self.N)
@@ -87,6 +89,8 @@ class Receptor:
                 dados[i] = totalInfo.max_temp
                 soma += totalInfo.max_temp
                 i += 1
+
+            #print(dictDados.values())
 
             media = soma/i
             dp = dados.std()
@@ -126,6 +130,7 @@ class Receptor:
 
         # Temporariamente, para teste, está sendo apenas impressa
         if currAnom:
-            print(f"Iteração {self.env.now}: \n", mean, self.opTot, currAnom, "\n")
+            print(f"Iteração {self.env.now}: \n\t Media: {mean}\n\t Opinioes: {self.opTot}"
+                  f"\n\tAnomalias: {currAnom}\n")
         else:
-            print(f"Iteração {self.env.now}: \n", mean, self.opTot, "\n")
+            print(f"Iteração {self.env.now}: \n\t Media: {mean}\n\t Opinioes: {self.opTot}\n")
