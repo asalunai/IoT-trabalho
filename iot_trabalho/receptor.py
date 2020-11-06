@@ -6,6 +6,7 @@
 __all__ = ["Receptor"]
 
 
+import typing as T
 from dataclasses import dataclass
 import numpy as np
 from simpy import Environment
@@ -125,12 +126,16 @@ class Receptor:
 
             yield self.env.timeout(self.wait)
 
-    def send_data(self, mean: float, currAnom: dict = {}):
+    # TODO: trocar para get_data
+    def get_data(self):
+        return 0, 0, 0, 0, 0
+
+    def send_data(self, mean: float, curr_anom: T.Optional[dict] = None):
         # TODO: Como eviar essa informação? pra quem enviar?
 
         # Temporariamente, para teste, está sendo apenas impressa
-        if currAnom:
+        if curr_anom:
             print(f"Iteração {self.env.now}: \n\t Media: {mean}\n\t Opinioes: {self.opTot}"
-                  f"\n\tAnomalias: {currAnom}\n")
+                  f"\n\tAnomalias: {curr_anom}\n")
         else:
             print(f"Iteração {self.env.now}: \n\t Media: {mean}\n\t Opinioes: {self.opTot}\n")

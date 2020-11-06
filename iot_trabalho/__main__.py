@@ -3,9 +3,43 @@
 from pathlib import Path
 
 import simpy
+import numpy as np
+import typing as T
+from dataclasses import dataclass, field
 
 from iot_trabalho.receptor import *  # Receptor
 from .leitura import DataReader
+
+
+N_DADOS = 10
+
+
+@dataclass
+class Coordenador:
+    nome: str
+    receptores: T.List[Receptor]
+    env: simpy.Environment
+
+    def __post_init__(self):
+        self.medias = np.zeros((N_DADOS, len(self.receptores)))     # TODO: Mudar tipo. Como organizar os dados recebidos dos receptores?
+        self.crencas = np.zeros((N_DADOS, len(self.receptores)))
+        self.descrencas = np.zeros((N_DADOS, len(self.receptores)))
+        self.incertezas = np.zeros((N_DADOS, len(self.receptores)))
+        self.anomalia = np.zeros((N_DADOS, len(self.receptores)))  # TODO: anomalias?
+
+        self.action = self.env.process(self.run())
+
+    def run(self):
+        # TODO: Incialmente printar grafos. Mas a ideia é fazer analise
+
+        for i, r in enumerate(self.receptores):
+            self.medias[-1, i], self.crencas[-1, i], self.descrencas[-1, i], self.incertezas[-1, i], self.anomalia[-1, i] = r.get_data()
+
+        # TODO: Analise
+
+        # TODO: Shiftar
+        #1 -> 0
+        #2 -> 1
 
 
 def main() -> None:
@@ -28,7 +62,7 @@ def main() -> None:
 
     r1 = Receptor('r1', env, N, reader)
 
-
+    c = Coordenador('c', [r1], env)
 
     env.run(until=10) # Temos 397 dias
 
