@@ -20,6 +20,8 @@ class Coordenador:
     receptores: T.List[Receptor]
     env: simpy.Environment
 
+    wait: float = 1
+
     def __post_init__(self):
         self.medias = np.zeros((N_DADOS, len(self.receptores)))     # TODO: Mudar tipo. Como organizar os dados recebidos dos receptores?
         self.crencas = np.zeros((N_DADOS, len(self.receptores)))
@@ -40,6 +42,7 @@ class Coordenador:
         # TODO: Shiftar
         #1 -> 0
         #2 -> 1
+        yield self.env.timeout(self.wait)
 
 
 def main() -> None:
