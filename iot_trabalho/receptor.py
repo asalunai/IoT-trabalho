@@ -65,6 +65,9 @@ class Receptor:
 
     def __post_init__(self):
         # TODO: Verificar como organizar as variaveis, quais devem ser atributos...
+        self.media = 0
+        self.anom = {}
+
         self.eventos = {"positivos": np.zeros(self.N), "negativos": np.zeros(self.N)}
         # self.dados = np.zeros(self.N)
         self.opTot = [
@@ -77,6 +80,7 @@ class Receptor:
         self.reader = self.reader.read_day_by_day()
 
         self.action = self.env.process(self.run())
+
 
     def run(self):
         while True:
@@ -122,20 +126,38 @@ class Receptor:
             if anomaliasAtuais:
                 media = media_seletiva(dados, anomaliasAtuais.keys())
 
-            self.send_data(media, anomaliasAtuais)
+            #self.print_data()
+
+            self.media = media
+            self.anom = anomaliasAtuais
 
             yield self.env.timeout(self.wait)
 
-    # TODO: trocar para get_data
+
     def get_data(self):
-        return 0, 0, 0, 0, 0
+        crencas = []
+        descrencas = []
+        incertezas = []
+        anomalias = []
 
-    def send_data(self, mean: float, curr_anom: T.Optional[dict] = None):
-        # TODO: Como eviar essa informação? pra quem enviar?
+        for idx, opiniao in enumerate(self.opTot):
+            b, d, u = opiniao.get_opiniao()
+            crencas += [b]
+            descrencas += [d]
+            incertezas += [u]
 
+            try:
+                anomalias += [self.anom[idx]]
+            except KeyError:
+                anomalias += [0]
+
+        return self.media, crencas, descrencas, incertezas, anomalias
+
+
+    def print_data(self):
         # Temporariamente, para teste, está sendo apenas impressa
-        if curr_anom:
-            print(f"Iteração {self.env.now}: \n\t Media: {mean}\n\t Opinioes: {self.opTot}"
-                  f"\n\tAnomalias: {curr_anom}\n")
+        if self.anom:
+            print(f"Iteração {self.env.now}: \n\t Media: {self.media}\n\t Opinioes: {self.opTot}"
+                  f"\n\tAnomalias: {self.anom}\n")
         else:
-            print(f"Iteração {self.env.now}: \n\t Media: {mean}\n\t Opinioes: {self.opTot}\n")
+            print(f"Iteração {self.env.now}: \n\t Media: {self.media}\n\t Opinioes: {self.opTot}\n")

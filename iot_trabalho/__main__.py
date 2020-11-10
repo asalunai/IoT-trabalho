@@ -32,17 +32,20 @@ class Coordenador:
         self.action = self.env.process(self.run())
 
     def run(self):
-        # TODO: Incialmente printar grafos. Mas a ideia é fazer analise
+        while True:
+            # TODO: Incialmente printar grafos. Mas a ideia é fazer analise
 
-        for i, r in enumerate(self.receptores):
-            self.medias[-1, i], self.crencas[-1, i], self.descrencas[-1, i], self.incertezas[-1, i], self.anomalia[-1, i] = r.get_data()
+            for i, r in enumerate(self.receptores):
+                #self.medias[-1, i], self.crencas[-1, i], self.descrencas[-1, i], self.incertezas[-1, i], self.anomalia[-1, i] = r.get_data()
+                print(r.get_data())
 
-        # TODO: Analise
+            # TODO: Analise
 
-        # TODO: Shiftar
-        #1 -> 0
-        #2 -> 1
-        yield self.env.timeout(self.wait)
+            # TODO: Shiftar
+            #1 -> 0
+            #2 -> 1
+
+            yield self.env.timeout(self.wait)
 
 
 def main() -> None:
