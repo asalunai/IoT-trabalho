@@ -6,12 +6,19 @@ import simpy
 import numpy as np
 import typing as T
 from dataclasses import dataclass, field
+import csv
 
 from iot_trabalho.receptor import *  # Receptor
 from .leitura import DataReader
 
 
 N_DADOS = 10
+
+out_files = ['dados_csv/media.csv',
+             'dados_csv/crenca.csv',
+             'dados_csv/descrenca.csv',
+             'dados_csv/incerteza.csv',
+             'dados_csv/anomalia.csv']
 
 
 @dataclass
@@ -37,7 +44,16 @@ class Coordenador:
 
             for i, r in enumerate(self.receptores):
                 #self.medias[-1, i], self.crencas[-1, i], self.descrencas[-1, i], self.incertezas[-1, i], self.anomalia[-1, i] = r.get_data()
-                print(r.get_data())
+                data_l = list(r.get_data())
+                data_l[0] = [data_l[0]]
+
+                # Salvando dados em csv (para gerar gráficos)
+                for idx, name in enumerate(out_files):
+                    with open(name, 'a', newline='') as f:
+                        writer = csv.writer(f, delimiter=',')
+                        writer.writerow(data_l[idx])
+
+                #print(data_l)
 
             # TODO: Analise
 
@@ -70,7 +86,7 @@ def main() -> None:
 
     c = Coordenador('c', [r1], env)
 
-    env.run(until=10) # Temos 397 dias
+    env.run(until=397) # Temos 397 dias
 
     #for entry in reader.read_day_by_day():
     #    print(entry)
