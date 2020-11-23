@@ -14,11 +14,11 @@ from .leitura import DataReader
 
 N_DADOS = 10
 
-out_files = ['dados_csv/media.csv',
-             'dados_csv/crenca.csv',
-             'dados_csv/descrenca.csv',
-             'dados_csv/incerteza.csv',
-             'dados_csv/anomalia.csv']
+#out_files = ['dados_csv/media.csv',
+#             'dados_csv/crenca.csv',
+#             'dados_csv/descrenca.csv',
+#             'dados_csv/incerteza.csv',
+#             'dados_csv/anomalia.csv']
 
 
 @dataclass
@@ -47,11 +47,11 @@ class Coordenador:
                 data_l = list(r.get_data())
                 data_l[0] = [data_l[0]]
 
-                # Salvando dados em csv (para gerar gráficos)
-                for idx, name in enumerate(out_files):
-                    with open(name, 'a', newline='') as f:
-                        writer = csv.writer(f, delimiter=',')
-                        writer.writerow(data_l[idx])
+                ## Salvando dados em csv (para gerar gráficos)
+                #for idx, name in enumerate(out_files):
+                #    with open(name, 'a', newline='') as f:
+                #        writer = csv.writer(f, delimiter=',')
+                #        writer.writerow(data_l[idx])
 
                 #print(data_l)
 
