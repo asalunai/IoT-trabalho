@@ -84,15 +84,21 @@ class Receptor:
 
     def run(self):
         while True:
-            dictDados = next(self.reader)
+            try:
+                dictDados = next(self.reader)
+            except StopIteration:
+                yield self.env.timeout(self.wait)
+                continue
+                #return
             # TODO: Discutir os dados que vamos usar, e COMO vamos usar aqui dentro
 
             dados = np.zeros(self.N)
             i = 0
             soma = 0
             for totalInfo in dictDados.values():
-                dados[i] = totalInfo.max_temp
-                soma += totalInfo.max_temp
+                if totalInfo.max_temp:
+                    dados[i] = totalInfo.max_temp
+                    soma += totalInfo.max_temp
                 i += 1
 
             #print(dictDados.values())

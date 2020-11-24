@@ -65,26 +65,35 @@ class Coordenador:
 
 
 def main() -> None:
-    sensores = [
+    sensores1 = [
         "A606",
         "A607",
         "A609",
-        "A618",
         "A621",
+    ]
+    sensores2 = [
+        "A618",
     ]
 
     env = simpy.Environment()
 
-    reader = DataReader(
+    reader1 = DataReader(
         Path("./dados_diarios"),
-        sensores,
+        sensores1,
+    )
+    reader2 = DataReader(
+        Path("./dados_diarios"),
+        sensores2,
     )
 
-    N = len(sensores)
+    N1 = len(sensores1)
+    N2 = len(sensores2)
 
-    r1 = Receptor('r1', env, N, reader)
+    r1 = Receptor('r1', env, N1, reader1)
+    r2 = Receptor('r1', env, N2, reader2)
 
-    c = Coordenador('c', [r1], env)
+
+    c = Coordenador('c', [r1, r2], env)
 
     env.run(until=397) # Temos 397 dias
 
