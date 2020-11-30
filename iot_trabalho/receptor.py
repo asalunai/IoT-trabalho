@@ -27,7 +27,7 @@ from iot_trabalho.leitura import *  # DataReader, DailyData
 
 def anomalia(dado: float, media: float, desvio: float) -> bool:
     # TODO: Rever essa definicao de anomalia
-    return abs(dado - media) > 1.5 * desvio
+    return abs(dado - media) > 1.0 * desvio
 
 
 def media_seletiva(arr: np.ndarray, indices) -> float:
