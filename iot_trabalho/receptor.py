@@ -27,7 +27,7 @@ from iot_trabalho.leitura import *  # DataReader, DailyData
 
 def anomalia(dado: float, media: float, desvio: float) -> bool:
     # TODO: Rever essa definicao de anomalia
-    return abs(dado - media) > 1.5*desvio
+    return abs(dado - media) > 1.5 * desvio
 
 
 def media_seletiva(arr: np.ndarray, indices) -> float:
@@ -77,19 +77,18 @@ class Receptor:
 
         self.k = 1
 
-        self.reader = self.reader.read_day_by_day()
+        self.reader_iter = self.reader.read_day_by_day()
 
         self.action = self.env.process(self.run())
-
 
     def run(self):
         while True:
             try:
-                dictDados = next(self.reader)
+                dictDados = next(self.reader_iter)
             except StopIteration:
                 yield self.env.timeout(self.wait)
                 continue
-                #return
+                # return
             # TODO: Discutir os dados que vamos usar, e COMO vamos usar aqui dentro
 
             dados = np.zeros(self.N)
@@ -101,9 +100,9 @@ class Receptor:
                     soma += totalInfo.max_temp
                 i += 1
 
-            #print(dictDados.values())
+            # print(dictDados.values())
 
-            media = soma/i
+            media = soma / i
             dp = dados.std()
 
             anomaliasAtuais = {}
@@ -132,13 +131,12 @@ class Receptor:
             if anomaliasAtuais:
                 media = media_seletiva(dados, anomaliasAtuais.keys())
 
-            #self.print_data()
+            # self.print_data()
 
             self.media = media
             self.anom = anomaliasAtuais
 
             yield self.env.timeout(self.wait)
-
 
     def get_data(self):
         crencas = []
@@ -159,11 +157,14 @@ class Receptor:
 
         return self.media, crencas, descrencas, incertezas, anomalias
 
-
     def print_data(self):
         # Temporariamente, para teste, está sendo apenas impressa
         if self.anom:
-            print(f"Iteração {self.env.now}: \n\t Media: {self.media}\n\t Opinioes: {self.opTot}"
-                  f"\n\tAnomalias: {self.anom}\n")
+            print(
+                f"Iteração {self.env.now}: \n\t Media: {self.media}\n\t Opinioes: {self.opTot}"
+                f"\n\tAnomalias: {self.anom}\n"
+            )
         else:
-            print(f"Iteração {self.env.now}: \n\t Media: {self.media}\n\t Opinioes: {self.opTot}\n")
+            print(
+                f"Iteração {self.env.now}: \n\t Media: {self.media}\n\t Opinioes: {self.opTot}\n"
+            )
