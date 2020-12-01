@@ -205,3 +205,4 @@ $RECYCLE.BIN/
 src/**/VERSION
 debug/*
 # End of https://www.gitignore.io/api/macos,linux,python,windows
+dados_csv/*.pdf
