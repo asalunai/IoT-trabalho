@@ -11,8 +11,8 @@ from dataclasses import dataclass
 import numpy as np
 from simpy import Environment
 
-from iot_trabalho.opiniao import *  # Opiniao, consenso
-from iot_trabalho.leitura import *  # DataReader, DailyData
+from opiniao import *  # Opiniao, consenso
+from leitura import *  # DataReader, DailyData
 
 # from dados import get_dados
 
