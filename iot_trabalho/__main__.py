@@ -17,46 +17,11 @@ N_DADOS = 10
 
 out_files = [
     [
-        "dados_csv/media_RS.csv",
-        "dados_csv/crenca_RS.csv",
-        "dados_csv/descrenca_RS.csv",
-        "dados_csv/incerteza_RS.csv",
-        "dados_csv/anomalia_RS.csv",
-    ],
-    [
-        "dados_csv/media_SC.csv",
-        "dados_csv/crenca_SC.csv",
-        "dados_csv/descrenca_SC.csv",
-        "dados_csv/incerteza_SC.csv",
-        "dados_csv/anomalia_SC.csv",
-    ],
-    [
-        "dados_csv/media_PN.csv",
-        "dados_csv/crenca_PN.csv",
-        "dados_csv/descrenca_PN.csv",
-        "dados_csv/incerteza_PN.csv",
-        "dados_csv/anomalia_PN.csv",
-    ],
-    [
-        "dados_csv/media_SP.csv",
-        "dados_csv/crenca_SP.csv",
-        "dados_csv/descrenca_SP.csv",
-        "dados_csv/incerteza_SP.csv",
-        "dados_csv/anomalia_SP.csv",
-    ],
-    [
-        "dados_csv/media_RJ.csv",
-        "dados_csv/crenca_RJ.csv",
-        "dados_csv/descrenca_RJ.csv",
-        "dados_csv/incerteza_RJ.csv",
-        "dados_csv/anomalia_RJ.csv",
-    ],
-    [
-        "dados_csv/media_ES.csv",
-        "dados_csv/crenca_ES.csv",
-        "dados_csv/descrenca_ES.csv",
-        "dados_csv/incerteza_ES.csv",
-        "dados_csv/anomalia_ES.csv",
+        "dados_csv/media_9est.csv",
+        "dados_csv/crenca_9est.csv",
+        "dados_csv/descrenca_9est.csv",
+        "dados_csv/incerteza_9est.csv",
+        "dados_csv/anomalia_9est.csv",
     ],
 ]
 
@@ -127,90 +92,20 @@ class Coordenador:
 
 
 def main() -> None:
-    sensoresRS = [
-        "A899",
-        "A802",
-        "A878",
-        "A801",
-        "A834",
-        "A808",
-    ]
-    sensoresSC = [
-        "A867",
-        "A866",
-        "A806",
-        "A868",
-        "A851",
-    ]
-    sensoresPN = [
-        "A873",
-    ]
-    sensoresSP = [
-        "A712",
-        "A765",
-        "A767",
-    ]
-    sensoresRJ = [
-        "A619",
-        "A609",
-        "A602",
-        "A621",
-        "A652",
-        # "A618",    # Terê
-        "A667",
-        "A606",
-        "A608",
-        "A607",
-        "A620",
-    ]
-    sensoresES = [
-        "A615",
-        "A634",
-        "A612",
-    ]
+    sensoresTot = [ 'A899','A806','A873','A834','A712','A619','A606','A620' ]
 
     env = simpy.Environment()
 
-    readerRS = DataReader(
+    readerTot = DataReader(
         Path("./dados_diarios"),
-        sensoresRS,
-    )
-    readerSC = DataReader(
-        Path("./dados_diarios"),
-        sensoresSC,
-    )
-    readerPN = DataReader(
-        Path("./dados_diarios"),
-        sensoresPN,
-    )
-    readerSP = DataReader(
-        Path("./dados_diarios"),
-        sensoresSP,
-    )
-    readerRJ = DataReader(
-        Path("./dados_diarios"),
-        sensoresRJ,
-    )
-    readerES = DataReader(
-        Path("./dados_diarios"),
-        sensoresES,
+        sensoresTot,
     )
 
-    NRS = len(sensoresRS)
-    NSC = len(sensoresSC)
-    NPN = len(sensoresPN)
-    NSP = len(sensoresSP)
-    NRJ = len(sensoresRJ)
-    NES = len(sensoresES)
+    N = len(sensoresTot)
 
-    r1 = Receptor("rRS", env, NRS, readerRS)
-    r2 = Receptor("rSC", env, NSC, readerSC)
-    r3 = Receptor("rPN", env, NPN, readerPN)
-    r4 = Receptor("rSP", env, NSP, readerSP)
-    r5 = Receptor("rRJ", env, NRJ, readerRJ)
-    r6 = Receptor("rES", env, NES, readerES)
+    r1 = Receptor("rTot", env, N, readerTot)
 
-    c = Coordenador("c", [r1, r2, r3, r4, r5, r6], env)
+    c = Coordenador("c", [r1], env)
 
     env.run(until=397)  # Temos 397 dias
 
